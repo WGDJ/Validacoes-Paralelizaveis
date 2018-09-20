@@ -31,10 +31,12 @@ public enum EnumValidacoesAgrupador {
     AGRUPAMENTO2(ClasseDeModelo2.class) {
         public Map<String, Object> getDadosCompartilhados() {
 
-            return new HashMap<String, Object>() {{
-                this.put("IDENTIFICADOR1", "Valor1");
-                this.put("IDENTIFICADOR2", new Object());
-            }};
+            HashMap dadosCompartilhados = new HashMap<String, Object>();
+            dadosCompartilhados.put("IDENTIFICADOR1", "Valor1");
+            dadosCompartilhados.put("IDENTIFICADOR2", new Object());
+            dadosCompartilhados.putAll(EnumValidacoesAgrupador.AGRUPAMENTO1.getDadosCompartilhados());
+
+            return dadosCompartilhados;
         }
 
         @Override
@@ -64,38 +66,6 @@ public enum EnumValidacoesAgrupador {
 
     public abstract List<EnumValidacoes> getValidacoes();
 
-    public static Set<Menssagem> validar(Object object) throws Exception {
-
-        for (EnumValidacoesAgrupador agrupador : EnumValidacoesAgrupador.values()) {
-            if (agrupador.getClazz().equals(object.getClass())) {
-                return agrupador.executarValidacoes(object);
-            }
-        }
-
-        return null;
-    }
-
-
-    private Set<Menssagem> executarValidacoes(Object object) throws Exception {
-
-        ThreadPool threadPool = new ThreadPool();
-
-        Set<Future<Set<Menssagem>>> menssagensFuture = new HashSet<Future<Set<Menssagem>>>();
-
-        for (EnumValidacoes validacao : this.getValidacoes()) {
-            menssagensFuture.add((Future<Set<Menssagem>>) threadPool.executeAsync(new Worker(object, this.getDadosCompartilhados(), validacao)));
-        }
-
-        threadPool.aguardarProcessamento();
-
-        Set<Menssagem> menssagens = new HashSet<Menssagem>();
-
-        for (Future<Set<Menssagem>> menssagem : menssagensFuture) {
-            menssagens.addAll(menssagem.get());
-        }
-
-        return menssagens;
-    }
 
 
 }

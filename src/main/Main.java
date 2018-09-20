@@ -5,7 +5,7 @@ import excecoes.Erro;
 import excecoes.Menssagem;
 import modelo.ClasseDeModelo1;
 import modelo.ClasseDeModelo2;
-import validacoes.EnumValidacoesAgrupador;
+import util.EstrategiaDeValidacao;
 
 import java.util.Set;
 
@@ -21,10 +21,10 @@ public class Main {
         classeDeModelo2.setNome("Nome");
         classeDeModelo2.setNumero("Numero");
 
-        Set<Menssagem> menssagens1 = EnumValidacoesAgrupador.validar(classeDeModelo1);
+        Set<Menssagem> menssagens1 = EstrategiaDeValidacao.validar(classeDeModelo1);
         imprimeMenssagens(menssagens1);
 
-        Set<Menssagem> menssagens2 = EnumValidacoesAgrupador.validar(classeDeModelo2);
+        Set<Menssagem> menssagens2 = EstrategiaDeValidacao.validar(classeDeModelo2);
         imprimeMenssagens(menssagens2);
 
     }
